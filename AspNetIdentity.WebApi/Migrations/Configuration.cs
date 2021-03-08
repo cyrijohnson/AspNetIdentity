@@ -26,15 +26,15 @@ namespace AspNetIdentity.WebApi.Migrations
             var user = new ApplicationUser()
             {
                 UserName = "SuperPowerUser",
-                Email = "taiseer.joudeh@gmail.com",
+                Email = "c.j@cop.com",
                 EmailConfirmed = true,
-                FirstName = "Taiseer",
-                LastName = "Joudeh",
+                FirstName = "Cyril",
+                LastName = "Johnson",
                 Level = 1,
                 JoinDate = DateTime.Now.AddYears(-3)
             };
 
-            manager.Create(user, "MySuperP@ss!");
+            manager.Create(user, "SuperUserPass@!");
 
             if (roleManager.Roles.Count() == 0)
             {
