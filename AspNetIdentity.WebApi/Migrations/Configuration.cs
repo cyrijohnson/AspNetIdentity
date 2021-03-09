@@ -26,7 +26,7 @@ namespace AspNetIdentity.WebApi.Migrations
             var user = new ApplicationUser()
             {
                 UserName = "SuperPowerUser",
-                Email = "c.j@cop.com",
+                Email = "c.j@sap.com",
                 EmailConfirmed = true,
                 FirstName = "Cyril",
                 LastName = "Johnson",
@@ -34,7 +34,7 @@ namespace AspNetIdentity.WebApi.Migrations
                 JoinDate = DateTime.Now.AddYears(-3)
             };
 
-            manager.Create(user, "SuperUserPass@!");
+            manager.Create(user, "MySuperP@ss!");
 
             if (roleManager.Roles.Count() == 0)
             {
