@@ -18,13 +18,16 @@ namespace AspNetIdentity.WebApi.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/MetaBlocks
+
+        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Route("getAllBlocks")]
         public IQueryable<MetaBlock> GetMetaBlocks()
         {
             return db.MetaBlocks;
         }
 
-        // GET: api/MetaBlocks/5
+        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Route("getBlockById")]
         [ResponseType(typeof(MetaBlock))]
         public IHttpActionResult GetMetaBlock(int id)
         {
@@ -38,6 +41,8 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // PUT: api/MetaBlocks/5
+        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Route("UpdateBlockById")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutMetaBlock(int id, MetaBlock metaBlock)
         {
