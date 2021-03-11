@@ -202,11 +202,8 @@ namespace AspNetIdentity.WebApi.Models
         [Display(Name = "Presiding Elder")]
         public string UserId { get; set; }
 
-        [Required]
         [Display(Name = "DistrictId")]
         public int DistrictId { get; set; }
 
-        [ForeignKey("DistrictId")]
-        public MetaDistrict DistFKId { get; set; }
     }
 }

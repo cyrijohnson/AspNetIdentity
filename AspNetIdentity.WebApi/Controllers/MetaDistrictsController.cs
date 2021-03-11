@@ -19,6 +19,36 @@ namespace AspNetIdentity.WebApi.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Route("getAllDistrictsByArea")]
+        public async System.Threading.Tasks.Task<IHttpActionResult> getDistrictsByArea(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            string query = "SELECT * FROM MetaDistricts where AreaId=@p0";
+            var metaDistrict = db.MetaDistricts.SqlQuery(query, id).ToList();
+            List<MetaDistrictDTO> response = new List<MetaDistrictDTO>();
+            foreach (MetaDistrict data in metaDistrict)
+            {
+                response.Add(new MetaDistrictDTO
+                {
+                    DistrictId = data.DistrictId,
+                    DistrictName = data.DistrictName,
+                    UserId = data.UserId,
+                    AreaId = data.AreaId,
+                    DistrictAddress = db.Addresses.Find(data.DistrictAddress)
+                });
+            }
+            if (metaDistrict == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(metaDistrict);
+        }
         // GET: api/MetaDistricts
         [Authorize(Roles = "User,Admin,SuperAdmin")]
         [Route("getAllDistricts")]
