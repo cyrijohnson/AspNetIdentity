@@ -77,7 +77,7 @@ namespace AspNetIdentity.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [Route("createBlock", Name ="DefaultApi")]
 
         [ResponseType(typeof(MetaBlock))]
@@ -95,6 +95,8 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // DELETE: api/MetaBlocks/5
+        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Route("deleteBlock")]
         [ResponseType(typeof(MetaBlock))]
         public IHttpActionResult DeleteMetaBlock(int id)
         {

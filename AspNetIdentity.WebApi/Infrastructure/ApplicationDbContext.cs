@@ -23,5 +23,17 @@ namespace AspNetIdentity.WebApi.Infrastructure
         }
 
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaBlock> MetaBlocks { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaCountry> MetaCountries { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaRcc> MetaRccs { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaArea> MetAreas { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.Address> Addresses { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaDistrict> MetaDistricts { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaLocalAssembly> MetaLocalAssemblies { get; set; }
     }
 }

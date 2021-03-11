@@ -143,10 +143,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\ClaimsController.cs" />
+    <Compile Include="Controllers\MetaAreasController.cs" />
     <Compile Include="Controllers\MetaBlocksController.cs" />
-    <Compile Include="Controllers\MetaDataController.cs" />
+    <Compile Include="Controllers\MetaCountriesController.cs" />
+    <Compile Include="Controllers\MetaDistrictsController.cs" />
+    <Compile Include="Controllers\MetaLocalAssembliesController.cs" />
+    <Compile Include="Controllers\MetaRccsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Infrastructure\ApplicationDbContext.cs" />
@@ -165,11 +170,13 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\ClaimBindingModel.cs" />
     <Compile Include="Models\MetadataBindingModels.cs" />
+    <Compile Include="Models\MetaDataDTO.cs" />
     <Compile Include="Models\ModelFactory.cs" />
     <Compile Include="Models\RoleBindingModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomJwtFormat.cs" />
     <Compile Include="Providers\CustomOAuthProvider.cs" />
+    <Compile Include="Services\AddressUtility.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\MyCustomPasswordValidator.cs" />
