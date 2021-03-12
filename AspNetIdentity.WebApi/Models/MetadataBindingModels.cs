@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspNetIdentity.WebApi.Models
 {
+
+    //Meta Data Models for ORG STRUCTURE
     public class MetaBlock
     {
         [Required]
@@ -206,4 +208,98 @@ namespace AspNetIdentity.WebApi.Models
         public int DistrictId { get; set; }
 
     }
+
+    // END of Meta Data Models for ORG STRUCTURE
+
+    //Meta Data Models for Profession Category
+
+    public class MetaProfessionCategory
+    {
+        [Required]
+        [Key]
+        [Display(Name = "Professional Category Id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ProfCatId { get; set; }
+
+        [Required]
+        [Display(Name = "Professional Catefory Name")]
+        public string ProfCatName { get; set; }
+
+        [Display(Name = "Professional Category Description")]
+        public string ProfCatDesc { get; set; }
+    }
+    //End of Meta Data Models for Profession Category
+
+    //Meta Data Models for Home Cells and Community Groups
+    public class MetaCommunityZone
+    {
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name ="Zone Id")]
+        public int ZoneId { get; set; }
+
+        [Required]
+        [Display(Name ="Zone Name")]
+        public string ZoneName { get; set; }
+
+        [Display(Name = "Zone Address")]
+        public int ZoneAddress { get; set; }
+
+        [ForeignKey("ZoneAddress")]
+        public Address ZoneAddrFKId { get; set; }
+
+        [Display(Name = "Zone Leader")]
+        public int ZoneLeader { get; set; }
+    }
+    public class MetaHomeCell
+    {
+        [Required]
+        [Key]
+        [Display(Name ="Home Cell Id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int HomeCellId { get; set; }
+
+        [Required]
+        [Display(Name = "Home Cell Name")]
+        public string HomeCellName { get; set; }
+
+        [Required]
+        [Display(Name = "Home Cell Address")]
+        public int CellAddress { get; set; }
+
+        [ForeignKey("CellAddress")]
+        public Address CellAddrFKId { get; set; }
+
+        [Display(Name ="Home Cell Leader")]
+        public int CellLeader { get; set; }
+
+        [Display(Name = "Community Zone")]
+        public int ZoneId { get; set; }
+
+        [ForeignKey("ZoneID")]
+        public MetaCommunityZone ZoneFKId { get; set; }
+    }
+
+    public class MetaGroup {
+
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Group Id")]
+        public int GroupId { get; set; }
+
+        [Required]
+        [Display(Name ="Group Name")]
+        public string GroupName { get; set; }
+
+        [Display(Name ="Group Description")]
+        public string GroupDeasc { get; set; }
+
+        [Display(Name ="Group Leader")]
+        public int GroupLeader { get; set; }
+    }
+    //End Of Meta Data Models for Home Cells and Community Groups
+
+    //Meta Data Model for Postings
 }
