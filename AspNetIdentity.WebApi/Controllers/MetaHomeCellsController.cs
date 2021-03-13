@@ -14,6 +14,7 @@ using AspNetIdentity.WebApi.Services;
 
 namespace AspNetIdentity.WebApi.Controllers
 {
+    [RoutePrefix("api/metadata")]
     public class MetaHomeCellsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();

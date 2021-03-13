@@ -151,9 +151,12 @@
     <Compile Include="Controllers\MetaCommunityZonesController.cs" />
     <Compile Include="Controllers\MetaCountriesController.cs" />
     <Compile Include="Controllers\MetaDistrictsController.cs" />
+    <Compile Include="Controllers\MetaEventTypesController.cs" />
     <Compile Include="Controllers\MetaGroupsController.cs" />
     <Compile Include="Controllers\MetaHomeCellsController.cs" />
     <Compile Include="Controllers\MetaLocalAssembliesController.cs" />
+    <Compile Include="Controllers\MetaPastoralCareTypesController.cs" />
+    <Compile Include="Controllers\MetaPostingsController.cs" />
     <Compile Include="Controllers\MetaProfessionCategoriesController.cs" />
     <Compile Include="Controllers\MetaRccsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />

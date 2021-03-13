@@ -43,5 +43,11 @@ namespace AspNetIdentity.WebApi.Infrastructure
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaHomeCell> MetaHomeCells { get; set; }
 
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaGroup> MetaGroups { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaPostings> MetaPostings { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaPastoralCareType> MetaPastoralCareTypes { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaEventType> MetaEventTypes { get; set; }
     }
 }

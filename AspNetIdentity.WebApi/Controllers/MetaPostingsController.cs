@@ -14,50 +14,50 @@ using AspNetIdentity.WebApi.Models;
 namespace AspNetIdentity.WebApi.Controllers
 {
     [RoutePrefix("api/metadata")]
-    public class MetaGroupsController : ApiController
+    public class MetaPostingsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/MetaGroups
+        // GET: api/MetaPostings
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("getAllGroups")]
-        public IQueryable<MetaGroup> GetMetaGroups()
+        [Route("getAllPostingTypes")]
+        public IQueryable<MetaPostings> GetMetaPostings()
         {
-            return db.MetaGroups;
+            return db.MetaPostings;
         }
 
-        // GET: api/MetaGroups/5
+        // GET: api/MetaPostings/5
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("getGroupById")]
-        [ResponseType(typeof(MetaGroup))]
-        public IHttpActionResult GetMetaGroup(int id)
+        [Route("getPostingTypeById")]
+        [ResponseType(typeof(MetaPostings))]
+        public IHttpActionResult GetMetaPostings(int id)
         {
-            MetaGroup metaGroup = db.MetaGroups.Find(id);
-            if (metaGroup == null)
+            MetaPostings metaPostings = db.MetaPostings.Find(id);
+            if (metaPostings == null)
             {
                 return NotFound();
             }
 
-            return Ok(metaGroup);
+            return Ok(metaPostings);
         }
 
-        // PUT: api/MetaGroups/5
+        // PUT: api/MetaPostings/5
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("updateGroup")]
+        [Route("updatePostingType")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutMetaGroup(int id, MetaGroup metaGroup)
+        public IHttpActionResult PutMetaPostings(int id, MetaPostings metaPostings)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != metaGroup.GroupId)
+            if (id != metaPostings.PostingId)
             {
                 return BadRequest();
             }
 
-            db.Entry(metaGroup).State = EntityState.Modified;
+            db.Entry(metaPostings).State = EntityState.Modified;
 
             try
             {
@@ -65,7 +65,7 @@ namespace AspNetIdentity.WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MetaGroupExists(id))
+                if (!MetaPostingsExists(id))
                 {
                     return NotFound();
                 }
@@ -78,40 +78,39 @@ namespace AspNetIdentity.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/MetaGroups
+        // POST: api/MetaPostings
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("createGroup")]
-        [ResponseType(typeof(MetaGroup))]
-        public IHttpActionResult PostMetaGroup(MetaGroup metaGroup)
+        [Route("createPostingType")]
+        [ResponseType(typeof(MetaPostings))]
+        public IHttpActionResult PostMetaPostings(MetaPostings metaPostings)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.MetaGroups.Add(metaGroup);
+            db.MetaPostings.Add(metaPostings);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = metaGroup.GroupId }, metaGroup);
+            return CreatedAtRoute("DefaultApi", new { id = metaPostings.PostingId }, metaPostings);
         }
 
-        // DELETE: api/MetaGroups/5
-
+        // DELETE: api/MetaPostings/5
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("deleteGroup")]
-        [ResponseType(typeof(MetaGroup))]
-        public IHttpActionResult DeleteMetaGroup(int id)
+        [Route("deletePostingType")]
+        [ResponseType(typeof(MetaPostings))]
+        public IHttpActionResult DeleteMetaPostings(int id)
         {
-            MetaGroup metaGroup = db.MetaGroups.Find(id);
-            if (metaGroup == null)
+            MetaPostings metaPostings = db.MetaPostings.Find(id);
+            if (metaPostings == null)
             {
                 return NotFound();
             }
 
-            db.MetaGroups.Remove(metaGroup);
+            db.MetaPostings.Remove(metaPostings);
             db.SaveChanges();
 
-            return Ok(metaGroup);
+            return Ok(metaPostings);
         }
 
         protected override void Dispose(bool disposing)
@@ -123,9 +122,9 @@ namespace AspNetIdentity.WebApi.Controllers
             base.Dispose(disposing);
         }
 
-        private bool MetaGroupExists(int id)
+        private bool MetaPostingsExists(int id)
         {
-            return db.MetaGroups.Count(e => e.GroupId == id) > 0;
+            return db.MetaPostings.Count(e => e.PostingId == id) > 0;
         }
     }
 }

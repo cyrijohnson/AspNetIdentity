@@ -14,50 +14,50 @@ using AspNetIdentity.WebApi.Models;
 namespace AspNetIdentity.WebApi.Controllers
 {
     [RoutePrefix("api/metadata")]
-    public class MetaGroupsController : ApiController
+    public class MetaEventTypesController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/MetaGroups
+        // GET: api/MetaEventTypes
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("getAllGroups")]
-        public IQueryable<MetaGroup> GetMetaGroups()
+        [Route("getAllEventTypes")]
+        public IQueryable<MetaEventType> GetMetaEventTypes()
         {
-            return db.MetaGroups;
+            return db.MetaEventTypes;
         }
 
-        // GET: api/MetaGroups/5
+        // GET: api/MetaEventTypes/5
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("getGroupById")]
-        [ResponseType(typeof(MetaGroup))]
-        public IHttpActionResult GetMetaGroup(int id)
+        [Route("getEventTypeById")]
+        [ResponseType(typeof(MetaEventType))]
+        public IHttpActionResult GetMetaEventType(int id)
         {
-            MetaGroup metaGroup = db.MetaGroups.Find(id);
-            if (metaGroup == null)
+            MetaEventType metaEventType = db.MetaEventTypes.Find(id);
+            if (metaEventType == null)
             {
                 return NotFound();
             }
 
-            return Ok(metaGroup);
+            return Ok(metaEventType);
         }
 
-        // PUT: api/MetaGroups/5
+        // PUT: api/MetaEventTypes/5
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("updateGroup")]
+        [Route("updateEventType")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutMetaGroup(int id, MetaGroup metaGroup)
+        public IHttpActionResult PutMetaEventType(int id, MetaEventType metaEventType)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != metaGroup.GroupId)
+            if (id != metaEventType.EventTypeId)
             {
                 return BadRequest();
             }
 
-            db.Entry(metaGroup).State = EntityState.Modified;
+            db.Entry(metaEventType).State = EntityState.Modified;
 
             try
             {
@@ -65,7 +65,7 @@ namespace AspNetIdentity.WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MetaGroupExists(id))
+                if (!MetaEventTypeExists(id))
                 {
                     return NotFound();
                 }
@@ -78,40 +78,39 @@ namespace AspNetIdentity.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/MetaGroups
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("createGroup")]
-        [ResponseType(typeof(MetaGroup))]
-        public IHttpActionResult PostMetaGroup(MetaGroup metaGroup)
+        [Route("createEventType")]
+        // POST: api/MetaEventTypes
+        [ResponseType(typeof(MetaEventType))]
+        public IHttpActionResult PostMetaEventType(MetaEventType metaEventType)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.MetaGroups.Add(metaGroup);
+            db.MetaEventTypes.Add(metaEventType);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = metaGroup.GroupId }, metaGroup);
+            return CreatedAtRoute("DefaultApi", new { id = metaEventType.EventTypeId }, metaEventType);
         }
 
-        // DELETE: api/MetaGroups/5
-
+        // DELETE: api/MetaEventTypes/5
         [Authorize(Roles = "User,Admin,SuperAdmin")]
-        [Route("deleteGroup")]
-        [ResponseType(typeof(MetaGroup))]
-        public IHttpActionResult DeleteMetaGroup(int id)
+        [Route("deleteEventType")]
+        [ResponseType(typeof(MetaEventType))]
+        public IHttpActionResult DeleteMetaEventType(int id)
         {
-            MetaGroup metaGroup = db.MetaGroups.Find(id);
-            if (metaGroup == null)
+            MetaEventType metaEventType = db.MetaEventTypes.Find(id);
+            if (metaEventType == null)
             {
                 return NotFound();
             }
 
-            db.MetaGroups.Remove(metaGroup);
+            db.MetaEventTypes.Remove(metaEventType);
             db.SaveChanges();
 
-            return Ok(metaGroup);
+            return Ok(metaEventType);
         }
 
         protected override void Dispose(bool disposing)
@@ -123,9 +122,9 @@ namespace AspNetIdentity.WebApi.Controllers
             base.Dispose(disposing);
         }
 
-        private bool MetaGroupExists(int id)
+        private bool MetaEventTypeExists(int id)
         {
-            return db.MetaGroups.Count(e => e.GroupId == id) > 0;
+            return db.MetaEventTypes.Count(e => e.EventTypeId == id) > 0;
         }
     }
 }

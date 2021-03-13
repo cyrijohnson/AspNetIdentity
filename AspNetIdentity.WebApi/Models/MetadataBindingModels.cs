@@ -302,4 +302,48 @@ namespace AspNetIdentity.WebApi.Models
     //End Of Meta Data Models for Home Cells and Community Groups
 
     //Meta Data Model for Postings
+    public class MetaPostings
+    {
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Posting Id")]
+        public int PostingId { get; set; }
+        [Required]
+        [Display(Name = "Posting Name")]
+        public string PostingType { get; set; }
+        [Display(Name = "Posting Description")]
+        public string Description { get; set; }
+    }
+    //End of Meta Data Model for Postings
+
+    //Meta Data Models for Pastoral Care
+    public class MetaPastoralCareType
+    {
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Pastoral Care Type Id")]
+        public int PcId { get; set; }
+        [Display(Name = "Pastoral Care Type Name")]
+        public string PcEventTypeName { get; set; }
+        [Display(Name = "Pastoral Care Type Description")]
+        public string PcEventTypeDesc { get; set; }
+    }
+
+    //End of Meta Data Models for Pastoral Care
+
+    // Meta Data Model for Events
+    public class MetaEventType
+    {
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Event Type Id")]
+        public int EventTypeId { get; set; }
+        [Display(Name = "Event Type Name")]
+        public string EventTypeName { get; set; }
+        [Display(Name = "Event Type Description")]
+        public string EventTypeDesc { get; set; }
+    }
 }
