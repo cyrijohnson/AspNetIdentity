@@ -16,10 +16,10 @@ namespace AspNetIdentity.WebApi.Models
         public int MemberId { get; set; }
 
         [Display(Name = "Local Assembly Id")]
-        public int localAssemblyId;
+        public int LocalAssemblyId;
 
         [ForeignKey("localAssemblyId")]
-        public MetaLocalAssembly localAssemblyFKId { get; set; }
+        public MetaLocalAssembly LocalAssemblyFKId { get; set; }
 
         [Display(Name = "Professional Category Id")]
         public int ProfCatId { get; set; }
@@ -108,7 +108,6 @@ namespace AspNetIdentity.WebApi.Models
 
         [ForeignKey("SocialMediaId")]
         public SocialMediaHandler SocMedFKId { get; set; }
-
     }
 
     public class SalvationStatus

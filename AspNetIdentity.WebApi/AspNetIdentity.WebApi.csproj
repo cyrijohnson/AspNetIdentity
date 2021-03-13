@@ -148,9 +148,13 @@
     <Compile Include="Controllers\ClaimsController.cs" />
     <Compile Include="Controllers\MetaAreasController.cs" />
     <Compile Include="Controllers\MetaBlocksController.cs" />
+    <Compile Include="Controllers\MetaCommunityZonesController.cs" />
     <Compile Include="Controllers\MetaCountriesController.cs" />
     <Compile Include="Controllers\MetaDistrictsController.cs" />
+    <Compile Include="Controllers\MetaGroupsController.cs" />
+    <Compile Include="Controllers\MetaHomeCellsController.cs" />
     <Compile Include="Controllers\MetaLocalAssembliesController.cs" />
+    <Compile Include="Controllers\MetaProfessionCategoriesController.cs" />
     <Compile Include="Controllers\MetaRccsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\RolesController.cs" />

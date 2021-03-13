@@ -35,5 +35,13 @@ namespace AspNetIdentity.WebApi.Infrastructure
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaDistrict> MetaDistricts { get; set; }
 
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaLocalAssembly> MetaLocalAssemblies { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaProfessionCategory> MetaProfessionCategories { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaCommunityZone> MetaCommunityZones { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaHomeCell> MetaHomeCells { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaGroup> MetaGroups { get; set; }
     }
 }

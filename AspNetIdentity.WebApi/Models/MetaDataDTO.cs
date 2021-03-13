@@ -49,4 +49,34 @@ namespace AspNetIdentity.WebApi.Models
         public MetaLocalAssembly assembly { get; set; }
         public Address address { get; set; }
     }
+
+    public class MetaCommunityZoneDTO
+    {
+        public int ZoneId { get; set; }
+        public string ZoneName { get; set; }
+        public Address ZoneAddress { get; set; }
+        public int ZoneLeader { get; set; }
+    }
+
+    public class CommunityZoneAddressUpdateDTO
+    {
+        public MetaCommunityZone CommunityZone { get; set; }
+        public Address CommunityZoneAddress { get; set; }
+    }
+
+    public class MetaHomeCellDTO
+    {
+        public int HomeCellId { get; set; }    
+        public string HomeCellName { get; set; }
+        public Address CellAddress { get; set; }
+        public int CellLeader { get; set; }     
+        public int ZoneId { get; set; }
+
+    }
+
+    public class HomeCellAddressUpdateDTO
+    {
+        public MetaHomeCell HomeCell { get; set; }
+        public Address HomeCellAddress { get; set; }
+    }
 }

@@ -88,8 +88,6 @@ namespace AspNetIdentity.WebApi.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(metaLocalAssembly);
             MetaLocalAssembly metaAssembly = db.MetaLocalAssemblies.Find(id);
             MetaLocalAssemblyDTO response = new MetaLocalAssemblyDTO();
             response.AssemblyName = metaAssembly.AssemblyName;
