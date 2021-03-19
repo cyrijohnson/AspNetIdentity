@@ -144,8 +144,10 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\AddressesController.cs" />
+    <Compile Include="Controllers\BaptistStatusController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\ClaimsController.cs" />
+    <Compile Include="Controllers\GroupMemberRelationsController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Controllers\MetaAreasController.cs" />
     <Compile Include="Controllers\MetaBlocksController.cs" />
@@ -161,7 +163,9 @@
     <Compile Include="Controllers\MetaProfessionCategoriesController.cs" />
     <Compile Include="Controllers\MetaRccsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\PostingsController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
+    <Compile Include="Controllers\SocialMediaHandlersController.cs" />
     <Compile Include="Infrastructure\ApplicationDbContext.cs" />
     <Compile Include="Infrastructure\ApplicationRole.cs" />
     <Compile Include="Infrastructure\ApplicationRoleManager.cs" />

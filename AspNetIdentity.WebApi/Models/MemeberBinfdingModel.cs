@@ -167,4 +167,48 @@ namespace AspNetIdentity.WebApi.Models
         [Display(Name = "Date Of Baptism")]
         public string Date { get; set; }
     }
+
+    public class GroupMemberRelation
+    {
+        [Required]
+        [Display(Name = "Group Id")]
+        [Key]
+        [Column(Order = 1)]
+        public int GroupId { get; set; }
+
+        [Required]
+        [Display(Name = "Member Id")]
+        [Key]
+        [Column(Order = 2)]
+        public int MemberId { get; set; }
+    }
+
+    public class Posting
+    {
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Posting Id")]
+        public int PostingId { get; set; }
+
+        [Required]
+        [Display(Name = "Member Id")]
+        public int MemberId { get; set; }
+
+        [Required]
+        [Display(Name = "Posting Type")]
+        public int PostingType { get; set; }
+
+        [Display(Name = "Date")]
+        public string Date { get; set; }
+
+        [Display(Name = "OriginAssemblyId")]
+        public int OriginAssemblyId { get; set; }
+
+        [Display(Name = "DestinationAssemblyId")]
+        public int DestinationAssemblyId { get; set; }
+
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+    }
 }

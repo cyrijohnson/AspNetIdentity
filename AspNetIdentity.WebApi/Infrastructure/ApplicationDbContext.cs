@@ -53,5 +53,13 @@ namespace AspNetIdentity.WebApi.Infrastructure
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.Member> Members { get; set; }
 
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.SalvationStatus> SalvationStatus { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.SocialMediaHandler> SocialMediaHandlers { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.BaptistStatus> BaptistStatus { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.GroupMemberRelation> GroupMemberRelations { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.Posting> Postings { get; set; }
     }
 }
