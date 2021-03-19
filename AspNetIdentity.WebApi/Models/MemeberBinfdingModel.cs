@@ -16,9 +16,9 @@ namespace AspNetIdentity.WebApi.Models
         public int MemberId { get; set; }
 
         [Display(Name = "Local Assembly Id")]
-        public int LocalAssemblyId;
+        public int LocalAssemblyId { get; set; }
 
-        [ForeignKey("localAssemblyId")]
+        [ForeignKey("LocalAssemblyId")]
         public MetaLocalAssembly LocalAssemblyFKId { get; set; }
 
         [Display(Name = "Professional Category Id")]
@@ -30,10 +30,6 @@ namespace AspNetIdentity.WebApi.Models
         [Display(Name = "Address Id")]
         public int MemberAddress { get; set; }
 
-        [ForeignKey("MemberAddress")]
-        public Address MemberAddrFKId { get; set; }
-
-        //here
         [Display(Name ="AssuranceId")]
         public int AssuranceId { get; set; }
 
@@ -42,9 +38,6 @@ namespace AspNetIdentity.WebApi.Models
 
         [Display(Name ="Home Cell Id")]
         public int HomeCellId { get; set; }
-
-        [ForeignKey("HomeCellId")]
-        public MetaHomeCell HomeCellFKId { get; set; }
 
         [Display(Name ="Title")]
         public string Title { get; set; }
@@ -103,11 +96,6 @@ namespace AspNetIdentity.WebApi.Models
         [Display(Name ="Child Flag")]
         public bool ChildFlag{ get; set; }
 
-        [Display(Name = "Social Media Handler Id")]
-        public int SocialMediaId { get; set; }
-
-        [ForeignKey("SocialMediaId")]
-        public SocialMediaHandler SocMedFKId { get; set; }
     }
 
     public class SalvationStatus

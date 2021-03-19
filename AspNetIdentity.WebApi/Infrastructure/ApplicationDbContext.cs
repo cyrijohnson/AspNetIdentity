@@ -49,5 +49,9 @@ namespace AspNetIdentity.WebApi.Infrastructure
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaPastoralCareType> MetaPastoralCareTypes { get; set; }
 
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MetaEventType> MetaEventTypes { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.Member> Members { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.SalvationStatus> SalvationStatus { get; set; }
     }
 }

@@ -276,9 +276,6 @@ namespace AspNetIdentity.WebApi.Models
 
         [Display(Name = "Community Zone")]
         public int ZoneId { get; set; }
-
-        [ForeignKey("ZoneId")]
-        public MetaCommunityZone ZoneFKId { get; set; }
     }
 
     public class MetaGroup {

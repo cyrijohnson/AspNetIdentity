@@ -146,6 +146,7 @@
     <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\ClaimsController.cs" />
+    <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Controllers\MetaAreasController.cs" />
     <Compile Include="Controllers\MetaBlocksController.cs" />
     <Compile Include="Controllers\MetaCommunityZonesController.cs" />
