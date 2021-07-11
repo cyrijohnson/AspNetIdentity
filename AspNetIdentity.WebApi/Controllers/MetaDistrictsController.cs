@@ -19,7 +19,7 @@ namespace AspNetIdentity.WebApi.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllDistrictsByArea")]
         public async System.Threading.Tasks.Task<IHttpActionResult> getDistrictsByArea(int id)
         {
@@ -47,10 +47,40 @@ namespace AspNetIdentity.WebApi.Controllers
                 return NotFound();
             }
 
-            return Ok(metaDistrict);
+            return Ok(response);
         }
+
+        public  List<MetaDistrictDTO> getDistrictsByAreaArray(int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+
+            string query = "SELECT * FROM MetaDistricts where AreaId=@p0";
+            var metaDistrict = db.MetaDistricts.SqlQuery(query, id).ToList();
+            List<MetaDistrictDTO> response = new List<MetaDistrictDTO>();
+            foreach (MetaDistrict data in metaDistrict)
+            {
+                response.Add(new MetaDistrictDTO
+                {
+                    DistrictId = data.DistrictId,
+                    DistrictName = data.DistrictName,
+                    UserId = data.UserId,
+                    AreaId = data.AreaId,
+                    DistrictAddress = db.Addresses.Find(data.DistrictAddress)
+                });
+            }
+            if (metaDistrict == null)
+            {
+                return null;
+            }
+
+            return response;
+        }
+
         // GET: api/MetaDistricts
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllDistricts")]
         public async System.Threading.Tasks.Task<IHttpActionResult> GetMetaDistricts()
         {
@@ -72,10 +102,10 @@ namespace AspNetIdentity.WebApi.Controllers
                 return NotFound();
             }
 
-            return Ok(metaDist);
+            return Ok(response);
         }
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getDistrictsById")]
         // GET: api/MetaDistricts/5
         [ResponseType(typeof(MetaDistrict))]
@@ -96,8 +126,25 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok(response); 
         }
 
+        public MetaDistrictDTO GetMetaDistrictLocal(int id)
+        {
+            MetaDistrict metaDistrict = db.MetaDistricts.Find(id);
+            MetaDistrictDTO response = new MetaDistrictDTO();
+            response.DistrictName = metaDistrict.DistrictName;
+            response.DistrictId = metaDistrict.DistrictId;
+            response.UserId = metaDistrict.UserId;
+            response.DistrictAddress = db.Addresses.Find(metaDistrict.DistrictAddress);
+            response.AreaId = metaDistrict.AreaId;
+            if (response == null)
+            {
+                return null;
+            }
+
+            return response;
+        }
+
         // PUT: api/MetaDistricts/5
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor")]
         [Route("updateDistrict")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutMetaDistrict(int id, districtAddressUpdateDTO data)
@@ -138,29 +185,30 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // POST: api/MetaDistricts
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor")]
         [Route("createDistrict")]
         [ResponseType(typeof(MetaDistrict))]
-        public IHttpActionResult PostMetaDistrict(MetaDistrictDTO metaDistrict)
+        public IHttpActionResult PostMetaDistrict(MetaDistrictDTO[] metaDistrict)
         {
-            MetaDistrict distict = new MetaDistrict();
-            AddressUtility serviceObject = new AddressUtility();
-            distict.DistrictName = metaDistrict.DistrictName;
-            distict.UserId = metaDistrict.UserId;
-            distict.AreaId = metaDistrict.AreaId;
-            distict.DistrictAddress = serviceObject.addAddress(metaDistrict.DistrictAddress);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            db.MetaDistricts.Add(distict);
+            AddressUtility serviceObject = new AddressUtility();
+            foreach(MetaDistrictDTO i in metaDistrict)
+            {
+                MetaDistrict distict = new MetaDistrict();
+                distict.DistrictName = i.DistrictName;
+                distict.UserId = i.UserId;
+                distict.AreaId = i.AreaId;
+                distict.DistrictAddress = serviceObject.addAddress(i.DistrictAddress);
+                db.MetaDistricts.Add(distict);
+            }
             db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = metaDistrict.DistrictId }, metaDistrict);
+            return Ok();
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead")]
         [Route("deleteDistrict")]
         // DELETE: api/MetaDistricts/5
         [ResponseType(typeof(MetaDistrict))]

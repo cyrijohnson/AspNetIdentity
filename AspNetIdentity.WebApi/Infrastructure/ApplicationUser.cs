@@ -26,6 +26,9 @@ namespace AspNetIdentity.WebApi.Infrastructure
         [Required]
         public DateTime JoinDate { get; set; }
 
+        [Required]
+        public string MemberId { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);

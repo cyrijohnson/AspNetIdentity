@@ -19,7 +19,7 @@ namespace AspNetIdentity.WebApi.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllAssembliesByDistrict")]
         public async System.Threading.Tasks.Task<IHttpActionResult> getAssembliesByDistrict(int id)
         {
@@ -47,10 +47,39 @@ namespace AspNetIdentity.WebApi.Controllers
                 return NotFound();
             }
 
-            return Ok(metaAssemblies);
+            return Ok(response);
         }
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        public List<MetaLocalAssemblyDTO> getAssembliesByDistrictArray(int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+
+            string query = "SELECT * FROM MetaLocalAssemblies where DistrictId=@p0";
+            var metaAssemblies = db.MetaLocalAssemblies.SqlQuery(query, id).ToList();
+            List<MetaLocalAssemblyDTO> response = new List<MetaLocalAssemblyDTO>();
+            foreach (MetaLocalAssembly data in metaAssemblies)
+            {
+                response.Add(new MetaLocalAssemblyDTO
+                {
+                    AssemblyId = data.AssemblyId,
+                    AssemblyName = data.AssemblyName,
+                    UserId = data.UserId,
+                    DistrictId = data.DistrictId,
+                    AssemblyAddress = db.Addresses.Find(data.AssemblyAddress)
+                });
+            }
+            if (metaAssemblies == null)
+            {
+                return null;
+            }
+
+            return response;
+        }
+
+        [Authorize]
         [Route("getAllLocalAssemblies")]
         // GET: api/MetaLocalAssemblies
         public async System.Threading.Tasks.Task<IHttpActionResult> GetMetaLocalAssemblies()
@@ -74,10 +103,10 @@ namespace AspNetIdentity.WebApi.Controllers
                 return NotFound();
             }
 
-            return Ok(metaLA);
+            return Ok(response);
         }
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getLocalAssembliesById")]
         // GET: api/MetaLocalAssemblies/5
         [ResponseType(typeof(MetaLocalAssembly))]
@@ -103,7 +132,24 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        public MetaLocalAssemblyDTO GetMetaLocalAssemblyLocal(int id)
+        {
+            MetaLocalAssembly metaLocalAssembly = db.MetaLocalAssemblies.Find(id);
+            if (metaLocalAssembly == null)
+            {
+                return null;
+            }
+            MetaLocalAssembly metaAssembly = db.MetaLocalAssemblies.Find(id);
+            MetaLocalAssemblyDTO response = new MetaLocalAssemblyDTO();
+            response.AssemblyName = metaAssembly.AssemblyName;
+            response.AssemblyId = metaAssembly.AssemblyId;
+            response.UserId = metaAssembly.UserId;
+            response.AssemblyAddress = db.Addresses.Find(metaAssembly.AssemblyAddress);
+            response.DistrictId = metaAssembly.DistrictId;
+            return response;
+        }
+
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
         [Route("updateLocalAssebly")]
         // PUT: api/MetaLocalAssemblies/5
         [ResponseType(typeof(void))]
@@ -144,30 +190,32 @@ namespace AspNetIdentity.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
         [Route("createLocalAssembly")]
         // POST: api/MetaLocalAssemblies
         [ResponseType(typeof(MetaLocalAssembly))]
-        public IHttpActionResult PostMetaLocalAssembly(MetaLocalAssemblyDTO metaLocalAssembly)
+        public IHttpActionResult PostMetaLocalAssembly(MetaLocalAssemblyDTO[] metaLocalAssembly)
         {
-            MetaLocalAssembly assembly = new MetaLocalAssembly();
-            AddressUtility serviceObject = new AddressUtility();
-            assembly.AssemblyName = metaLocalAssembly.AssemblyName;
-            assembly.UserId = metaLocalAssembly.UserId;
-            assembly.DistrictId = metaLocalAssembly.DistrictId;
-            assembly.AssemblyAddress = serviceObject.addAddress(metaLocalAssembly.AssemblyAddress);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            db.MetaLocalAssemblies.Add(assembly);
+            AddressUtility serviceObject = new AddressUtility();
+            foreach (MetaLocalAssemblyDTO i in metaLocalAssembly)
+            {
+                MetaLocalAssembly assembly = new MetaLocalAssembly();
+                assembly.AssemblyName = i.AssemblyName;
+                assembly.UserId = i.UserId;
+                assembly.DistrictId = i.DistrictId;
+                assembly.AssemblyAddress = serviceObject.addAddress(i.AssemblyAddress);
+                db.MetaLocalAssemblies.Add(assembly);
+            }
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = metaLocalAssembly.AssemblyId }, metaLocalAssembly);
+            return Ok();
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor")]
         [Route("deleteLocalAssembly")]
         // DELETE: api/MetaLocalAssemblies/5
         [ResponseType(typeof(MetaLocalAssembly))]

@@ -17,7 +17,7 @@ namespace AspNetIdentity.WebApi.Controllers
     public class AccountsController : BaseApiController
     {
 
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles= "SuperAdmin")]
         [Route("users")]
         public IHttpActionResult GetUsers()
         {
@@ -27,7 +27,7 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok(this.AppUserManager.Users.ToList().Select(u => this.TheModelFactory.Create(u)));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, AreaHead, DistPastor, PresElder")]
         [Route("user/{id:guid}", Name = "GetUserById")]
         public async Task<IHttpActionResult> GetUser(string Id)
         {
@@ -43,8 +43,10 @@ namespace AspNetIdentity.WebApi.Controllers
 
         }
 
-        [Authorize(Roles = "Admin")]
-        [Route("user/{username}")]
+
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, AreaHead, DistPastor, PresElder")]
+        [Route("findUserByUserName")]
+        [Route("{username}")]
         public async Task<IHttpActionResult> GetUserByName(string username)
         {
             //Only SuperAdmin or Admin can delete users (Later when implement roles)
@@ -77,6 +79,7 @@ namespace AspNetIdentity.WebApi.Controllers
                 LastName = createUserModel.LastName,
                 Level = 3,
                 JoinDate = DateTime.Now.Date,
+                MemberId = createUserModel.MemberId
             };
 
 
@@ -143,7 +146,7 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead")]
         [Route("user/{id:guid}")]
         public async Task<IHttpActionResult> DeleteUser(string id)
         {
@@ -169,7 +172,8 @@ namespace AspNetIdentity.WebApi.Controllers
           
         }
 
-        [Authorize(Roles="Admin")]
+
+        [Authorize(Roles= "SuperAdmin, TopMgmt, BlkCoor, NatHead")]
         [Route("user/{id:guid}/roles")]
         [HttpPut]
         public async Task<IHttpActionResult> AssignRolesToUser([FromUri] string id, [FromBody] string[] rolesToAssign)
@@ -212,7 +216,7 @@ namespace AspNetIdentity.WebApi.Controllers
 
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead")]
         [Route("user/{id:guid}/assignclaims")]
         [HttpPut]
         public async Task<IHttpActionResult> AssignClaimsToUser([FromUri] string id, [FromBody] List<ClaimBindingModel> claimsToAssign) {
@@ -242,7 +246,7 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead")]
         [Route("user/{id:guid}/removeclaims")]
         [HttpPut]
         public async Task<IHttpActionResult> RemoveClaimsFromUser([FromUri] string id, [FromBody] List<ClaimBindingModel> claimsToRemove)

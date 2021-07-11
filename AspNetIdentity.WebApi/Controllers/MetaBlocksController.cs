@@ -19,14 +19,19 @@ namespace AspNetIdentity.WebApi.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllBlocks")]
+        public MetaBlock[] GetMetaBlocksArray()
+        {
+            return db.MetaBlocks.ToArray();
+        }
+
         public IQueryable<MetaBlock> GetMetaBlocks()
         {
             return db.MetaBlocks;
         }
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getBlockById")]
         [ResponseType(typeof(MetaBlock))]
         public IHttpActionResult GetMetaBlock(int id)
@@ -40,8 +45,21 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok(metaBlock);
         }
 
+        public MetaBlock[] GetMetaBlockByIdArray(int id)
+        {
+            MetaBlock metaBlock = db.MetaBlocks.Find(id);
+            MetaBlock[] response = new MetaBlock[1];
+            response[0] = metaBlock;
+            if (metaBlock == null)
+            {
+                return null ;
+            }
+
+            return response;
+        }
+
         // PUT: api/MetaBlocks/5
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor")]
         [Route("UpdateBlockById")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutMetaBlock(int id, MetaBlock metaBlock)
@@ -77,25 +95,26 @@ namespace AspNetIdentity.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead")]
         [Route("createBlock", Name ="DefaultApi")]
 
         [ResponseType(typeof(MetaBlock))]
-        public IHttpActionResult PostMetaBlock(MetaBlock metaBlock)
+        public IHttpActionResult PostMetaBlock(MetaBlock[] metaBlock)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var identity = User.Identity as System.Security.Claims.ClaimsIdentity;
-            db.MetaBlocks.Add(metaBlock);
+            foreach(MetaBlock i in metaBlock){
+                db.MetaBlocks.Add(i);
+            }
             db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = metaBlock.BlockId }, metaBlock);
+            return Ok();
         }
 
         // DELETE: api/MetaBlocks/5
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt")]
         [Route("deleteBlock")]
         [ResponseType(typeof(MetaBlock))]
         public IHttpActionResult DeleteMetaBlock(int id)

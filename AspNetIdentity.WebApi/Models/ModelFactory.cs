@@ -34,7 +34,8 @@ namespace AspNetIdentity.WebApi.Models
                 Level = appUser.Level,
                 JoinDate = appUser.JoinDate,
                 Roles = _AppUserManager.GetRolesAsync(appUser.Id).Result,
-                Claims = _AppUserManager.GetClaimsAsync(appUser.Id).Result
+                Claims = _AppUserManager.GetClaimsAsync(appUser.Id).Result,
+                MemberId = appUser.MemberId
             };
 
         }
@@ -61,6 +62,7 @@ namespace AspNetIdentity.WebApi.Models
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
         public int Level { get; set; }
+        public string MemberId { get; set; }
         public DateTime JoinDate { get; set; }
         public IList<string> Roles { get; set; }
         public IList<System.Security.Claims.Claim> Claims { get; set; }

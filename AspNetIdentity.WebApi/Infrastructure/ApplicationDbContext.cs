@@ -61,5 +61,7 @@ namespace AspNetIdentity.WebApi.Infrastructure
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.GroupMemberRelation> GroupMemberRelations { get; set; }
 
         public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.Posting> Postings { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetIdentity.WebApi.Models.MemberUser> MemberUsers { get; set; }
     }
 }

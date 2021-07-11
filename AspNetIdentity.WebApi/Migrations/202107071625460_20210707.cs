@@ -3,21 +3,19 @@ namespace AspNetIdentity.WebApi.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class _20210707 : DbMigration
     {
         public override void Up()
         {
-
-
             CreateTable(
-                 "dbo.AspNetRoles",
-                 c => new
-                 {
-                     Id = c.String(nullable: false, maxLength: 128),
-                     Name = c.String(nullable: false, maxLength: 256),
-                 })
-                 .PrimaryKey(t => t.Id)
-                 .Index(t => t.Name, unique: true, name: "RoleNameIndex");
+               "dbo.AspNetRoles",
+               c => new
+               {
+                   Id = c.String(nullable: false, maxLength: 128),
+                   Name = c.String(nullable: false, maxLength: 256),
+               })
+               .PrimaryKey(t => t.Id)
+               .Index(t => t.Name, unique: true, name: "RoleNameIndex");
 
             CreateTable(
                 "dbo.AspNetUserRoles",
@@ -52,6 +50,7 @@ namespace AspNetIdentity.WebApi.Migrations
                     LockoutEnabled = c.Boolean(nullable: false),
                     AccessFailedCount = c.Int(nullable: false),
                     UserName = c.String(nullable: false, maxLength: 256),
+                    MemberId = c.String(nullable: false, maxLength: 256),
                 })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.UserName, unique: true, name: "UserNameIndex");
@@ -80,18 +79,6 @@ namespace AspNetIdentity.WebApi.Migrations
                 .PrimaryKey(t => new { t.LoginProvider, t.ProviderKey, t.UserId })
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
-
-            CreateTable(
-                "dbo.MetaBlocks",
-                c => new
-                {
-                    BlockId = c.Int(nullable: false, identity: true),
-                    BlockName = c.String(nullable: false),
-                    BlockDescription = c.String(nullable: false),
-                    UserId = c.String(nullable: false),
-                })
-                .PrimaryKey(t => t.BlockId);
-
         }
         
         public override void Down()
@@ -111,7 +98,6 @@ namespace AspNetIdentity.WebApi.Migrations
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
-            DropTable("dbo.MetaBlocks");
         }
     }
 }

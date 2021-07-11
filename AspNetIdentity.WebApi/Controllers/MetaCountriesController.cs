@@ -18,14 +18,19 @@ namespace AspNetIdentity.WebApi.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllCountries")]
         public IQueryable<MetaCountry> GetMetaCountries()
         {
             return db.MetaCountries;
         }
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        public MetaCountry[] GetMetaCountriesArray()
+        {
+            return db.MetaCountries.ToArray();
+        }
+
+        [Authorize]
         [Route("getCountryById")]
         [ResponseType(typeof(MetaCountry))]
         public IHttpActionResult GetMetaCountry(int id)
@@ -39,7 +44,18 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok(metaCountry);
         }
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        public MetaCountry GetMetaCountryLocal(int id)
+        {
+            MetaCountry metaCountry = db.MetaCountries.Find(id);
+            if (metaCountry == null)
+            {
+                return null;
+            }
+
+            return metaCountry;
+        }
+
+        [Authorize]
         [Route("getCountryByBlock")]
         [ResponseType(typeof(MetaCountry))]
         public async System.Threading.Tasks.Task<IHttpActionResult> GetMetaCountryByBlockAsync(int id)
@@ -58,7 +74,18 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok(metaCountry);
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        public  MetaCountry[] GetMetaCountryByBlockArray(int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+            String query = "SELECT * FROM MetaCountries WHERE BlockId = @p0";
+            MetaCountry[] metaCountry = db.MetaCountries.SqlQuery(query, id).ToArray();
+            return metaCountry;
+        }
+
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead")]
         [Route("updateCountryById")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutMetaCountry(int id, MetaCountry metaCountry)
@@ -94,23 +121,31 @@ namespace AspNetIdentity.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead")]
         [Route("createCountry")]
         [ResponseType(typeof(MetaCountry))]
-        public IHttpActionResult PostMetaCountry(MetaCountry metaCountry)
+        public IHttpActionResult PostMetaCountry(MetaCountry[] metaCountry)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            db.MetaCountries.Add(metaCountry);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = metaCountry.CountryId }, metaCountry);
+            foreach(MetaCountry i in metaCountry)
+            {
+                db.MetaCountries.Add(i);
+            }
+            try
+            {
+                db.SaveChanges();
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor")]
         [Route("deleteCountryById")]
         [ResponseType(typeof(MetaCountry))]
         public IHttpActionResult DeleteMetaCountry(int id)

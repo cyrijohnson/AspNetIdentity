@@ -211,4 +211,17 @@ namespace AspNetIdentity.WebApi.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
     }
+
+    public class MemberUser
+    {
+        [Required]
+        [Key]
+        [Display(Name = "UserName")]
+        public string Username { get; set; }
+        
+        [Required]
+        [Display(Name = "MemberId")]
+        public string MemberId { get; set; }
+    }
+
 }

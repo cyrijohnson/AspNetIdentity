@@ -10,20 +10,61 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using AspNetIdentity.WebApi.Infrastructure;
 using AspNetIdentity.WebApi.Models;
+using AspNetIdentity.WebApi.Services;
+using Newtonsoft.Json;
 
 namespace AspNetIdentity.WebApi.Controllers
 {
-    public class MembersController : ApiController
+    [RoutePrefix("api/MemebershipManager")]
+    public class MembersController : BaseApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/Members
-        public IQueryable<Member> GetMembers()
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
+        [Route("getAllMemebers")]
+        public ReturnDataModel GetMembers()
         {
-            return db.Members;
+            MemberUtility utilityObject = new MemberUtility();
+            MemberUsersController controllerInstance = new MemberUsersController();
+            MemberUser bridgeTable = controllerInstance.GetMemberUserLocal(User.Identity.Name);
+            Member memberInfo = GetMemberById(int.Parse(bridgeTable.MemberId));
+            if (User.IsInRole("SuperAdmin") || User.IsInRole("TopMgmt"))
+            {
+                return utilityObject.getMembersAdmin();
+            }
+            else if (User.IsInRole("BlkCoor"))
+            {
+                return utilityObject.getMembersBlockCoor(memberInfo.LocalAssemblyId, User.Identity.Name);
+            }
+            else if (User.IsInRole("NatHead"))
+            {
+                return utilityObject.getMembersNatHead(memberInfo.LocalAssemblyId, User.Identity.Name);
+            }
+            else if (User.IsInRole("RccHead"))
+            {
+                return utilityObject.getMembersRccCoor(memberInfo.LocalAssemblyId, User.Identity.Name);
+            }
+            else if (User.IsInRole("AreaHead"))
+            {
+                return utilityObject.getMembersAreaHead(memberInfo.LocalAssemblyId, User.Identity.Name);
+            }
+            else if (User.IsInRole("DistPastor"))
+            {
+                return utilityObject.getMembersDistrictHead(memberInfo.LocalAssemblyId, User.Identity.Name);
+            }
+            else if (User.IsInRole("PresElder"))
+            {
+                return utilityObject.getMembersAssemblyHead(memberInfo.LocalAssemblyId, User.Identity.Name);
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 
-        // GET: api/Members/5
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
+        [Route("getAllMemebers")]
         [ResponseType(typeof(Member))]
         public IHttpActionResult GetMember(int id)
         {
@@ -34,6 +75,24 @@ namespace AspNetIdentity.WebApi.Controllers
             }
 
             return Ok(member);
+        }
+
+        public Member GetMemberById(int id)
+        {
+            Member member = db.Members.Find(id);
+            if (member == null)
+            {
+                return null;
+            }
+
+            return member;
+        }
+
+        public List<Member> GetMemberArrayByAssembly(int id)
+        {
+            string query = "SELECT * FROM Members where LocalAssemblyId=@p0";
+            List<Member> memberList = db.Members.SqlQuery(query, id).ToList();
+            return memberList;
         }
 
         // PUT: api/Members/5
@@ -72,6 +131,8 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // POST: api/Members
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
+        [Route("addMemeber")]
         [ResponseType(typeof(Member))]
         public IHttpActionResult PostMember(Member member)
         {

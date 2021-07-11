@@ -20,7 +20,7 @@ namespace AspNetIdentity.WebApi.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/MetaRccs
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllRccs")]
         public IQueryable<MetaRcc> GetMetaRccs()
         {
@@ -28,7 +28,7 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // GET: api/MetaRccs/5
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllRccById")]
         [ResponseType(typeof(MetaRcc))]
         public IHttpActionResult GetMetaRcc(int id)
@@ -42,8 +42,19 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok(metaRcc);
         }
 
+        public MetaRcc GetMetaRccLocal(int id)
+        {
+            MetaRcc metaRcc = db.MetaRccs.Find(id);
+            if (metaRcc == null)
+            {
+                return null;
+            }
+
+            return metaRcc;
+        }
+
         // PUT: api/MetaRccs/5
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead")]
         [Route("updateRcc")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutMetaRcc(int id, MetaRcc metaRcc)
@@ -80,24 +91,26 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // POST: api/MetaRccs
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead")]
         [Route("createRCC")]
         [ResponseType(typeof(MetaRcc))]
-        public IHttpActionResult PostMetaRcc(MetaRcc metaRcc)
+        public IHttpActionResult PostMetaRcc(MetaRcc[] metaRcc)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            db.MetaRccs.Add(metaRcc);
+            foreach(MetaRcc record in metaRcc)
+            {
+                db.MetaRccs.Add(record);
+            }
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = metaRcc.RccId }, metaRcc);
+            return Ok();
         }
 
         // DELETE: api/MetaRccs/5
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor")]
         [Route("deleteRccById")]
         [ResponseType(typeof(MetaRcc))]
         public IHttpActionResult DeleteMetaRcc(int id)
@@ -113,7 +126,7 @@ namespace AspNetIdentity.WebApi.Controllers
 
             return Ok(metaRcc);
         }
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllRccsByCountry")]
         public async System.Threading.Tasks.Task<IHttpActionResult> getRccByCountry(int id)
         {
@@ -130,6 +143,23 @@ namespace AspNetIdentity.WebApi.Controllers
             }
 
             return Ok(metaRcc);
+        }
+
+        public MetaRcc[] getRccByCountryArray(int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+
+            string query = "SELECT * FROM MetaRccs where CountryId=@p0";
+            MetaRcc[] metaRcc = db.MetaRccs.SqlQuery(query, id).ToArray();
+            if (metaRcc == null)
+            {
+                return null; ;
+            }
+
+            return metaRcc;
         }
 
         protected override void Dispose(bool disposing)

@@ -20,7 +20,7 @@ namespace AspNetIdentity.WebApi.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllAreasByRcc")]
         public async System.Threading.Tasks.Task<IHttpActionResult> getAreasByRcc(int id)
         {
@@ -50,7 +50,37 @@ namespace AspNetIdentity.WebApi.Controllers
 
             return Ok(metaArea);
         }
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+
+        public List<MetaAreaDTO> getAreasByRccArray(int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+
+            string query = "SELECT * FROM MetaAreas where RccId=@p0";
+            var metaArea = db.MetAreas.SqlQuery(query, id).ToList();
+            List<MetaAreaDTO> response = new List<MetaAreaDTO>();
+            foreach (MetaArea data in metaArea)
+            {
+                response.Add(new MetaAreaDTO
+                {
+                    AreaId = data.AreaId,
+                    AreaName = data.AreaName,
+                    UserId = data.UserId,
+                    RccId = data.RccId,
+                    AreaAddress = db.Addresses.Find(data.AreaAddress)
+                });
+            }
+            if (metaArea == null)
+            {
+                return null;
+            }
+
+            return response;
+        }
+
+        [Authorize]
         [Route("getAllAreas")]
         public async System.Threading.Tasks.Task<IHttpActionResult> GetMetAreas()
         {
@@ -76,7 +106,7 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // GET: api/MetaAreas/5
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize]
         [Route("getAllAreasById")]
         [ResponseType(typeof(MetaArea))]
         public IHttpActionResult GetMetaArea(int id)
@@ -96,7 +126,24 @@ namespace AspNetIdentity.WebApi.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        public MetaAreaDTO GetMetaAreaLocal(int id)
+        {
+            var metaArea = db.MetAreas.Find(id);
+            MetaAreaDTO response = new MetaAreaDTO();
+            response.AreaId = metaArea.AreaId;
+            response.AreaName = metaArea.AreaName;
+            response.UserId = metaArea.UserId;
+            response.AreaAddress = db.Addresses.Find(metaArea.AreaAddress);
+            response.RccId = metaArea.RccId;
+            if (response == null)
+            {
+                return null ;
+            }
+
+            return response;
+        }
+
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead")]
         [Route("updateAreaById")]
         // PUT: api/MetaAreas/5
         [ResponseType(typeof(void))]
@@ -137,29 +184,31 @@ namespace AspNetIdentity.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead")]
         [Route("createArea")]
         // POST: api/MetaAreas
         [ResponseType(typeof(MetaArea))]
-        public IHttpActionResult PostMetaArea(MetaAreaDTO metaAreaDTO)
+        public IHttpActionResult PostMetaArea(MetaAreaDTO[] metaAreaDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             AddressUtility serviceObject = new AddressUtility();
-            MetaArea metaArea = new MetaArea();
-            metaArea.AreaName = metaAreaDTO.AreaName;
-            metaArea.UserId = metaAreaDTO.UserId;
-            metaArea.RccId = metaAreaDTO.RccId;
-            metaArea.AreaAddress = serviceObject.addAddress(metaAreaDTO.AreaAddress);
-            db.MetAreas.Add(metaArea);
+            foreach (MetaAreaDTO i in metaAreaDTO)
+            {
+                MetaArea metaArea = new MetaArea();
+                metaArea.AreaName = i.AreaName;
+                metaArea.UserId = i.UserId;
+                metaArea.RccId = i.RccId;
+                metaArea.AreaAddress = serviceObject.addAddress(i.AreaAddress);
+                db.MetAreas.Add(metaArea);
+            }
             db.SaveChanges();
-            return CreatedAtRoute("DefaultApi", new { id = metaArea.AreaId }, metaArea);
+            return Ok();
         }
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead")]
         [Route("deleteAreaById")]
         // DELETE: api/MetaAreas/5
         [ResponseType(typeof(MetaArea))]
