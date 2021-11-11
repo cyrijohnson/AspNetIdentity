@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\AspNetIdentity.WebApi",
+    "\\AspNetIdentity.WebApi\\Controllers",
+    "\\AspNetIdentity.WebApi\\Models",
+    "\\AspNetIdentity.WebApi\\Services",
+    "\\AspNetIdentity.WebApi\\Validators"
   ],
   "SelectedNode": "\\AspNetIdentity.sln",
   "PreviewInSolutionExplorer": false

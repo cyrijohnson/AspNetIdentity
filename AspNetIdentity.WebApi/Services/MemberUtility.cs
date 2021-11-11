@@ -525,5 +525,14 @@ namespace AspNetIdentity.WebApi.Services
             }
         }
         //End of Get user meta Id's
+
+        //Get Memberinfo
+        public Member getMemberInfo(int memberId)
+        {
+            MembersController controllerObj = new MembersController();
+            Member memberInfo = controllerObj.GetMemberById(memberId);
+            return memberInfo;
+        }
+        //End of get memberinfo
     }
 }

@@ -251,6 +251,9 @@ namespace AspNetIdentity.WebApi.Models
 
         [Display(Name = "Zone Leader")]
         public int ZoneLeader { get; set; }
+
+        [Display(Name = "Local Assembly Key")]
+        public int localAssembly { get; set; }
     }
     public class MetaHomeCell
     {

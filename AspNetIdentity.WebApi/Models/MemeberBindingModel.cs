@@ -33,8 +33,8 @@ namespace AspNetIdentity.WebApi.Models
         [Display(Name ="AssuranceId")]
         public int AssuranceId { get; set; }
 
-        [ForeignKey("AssuranceId")]
-        public SalvationStatus AssuranceIdFKId { get; set; }
+        [Display(Name = "BaptismStatusId")]
+        public int BaptismStatusId { get; set; }
 
         [Display(Name ="Home Cell Id")]
         public int HomeCellId { get; set; }

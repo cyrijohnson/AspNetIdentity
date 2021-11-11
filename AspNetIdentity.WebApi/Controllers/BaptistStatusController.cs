@@ -10,9 +10,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using AspNetIdentity.WebApi.Infrastructure;
 using AspNetIdentity.WebApi.Models;
+using AspNetIdentity.WebApi.Services;
 
 namespace AspNetIdentity.WebApi.Controllers
 {
+    [RoutePrefix("api/MemberStatus")]
     public class BaptistStatusController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -24,9 +26,17 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // GET: api/BaptistStatus/5
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
+        [Route("getBaptismStatusById")]
         [ResponseType(typeof(BaptistStatus))]
-        public IHttpActionResult GetBaptistStatus(int id)
+        public IHttpActionResult GetBaptistStatus(int memberId)
         {
+            int id = 0;
+            LocalValidationHelper validationHelper = new LocalValidationHelper();
+            if (validationHelper.checkUserValidity(User.Identity.Name, memberId))
+            {
+                id = new MemberUtility().getMemberInfo(memberId).BaptismStatusId;
+            }
             BaptistStatus baptistStatus = db.BaptistStatus.Find(id);
             if (baptistStatus == null)
             {
@@ -37,12 +47,25 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // PUT: api/BaptistStatus/5
+        [Authorize(Roles = "PresElder")]
+        [Route("updateBaptismStatus")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutBaptistStatus(int id, BaptistStatus baptistStatus)
+        public IHttpActionResult PutBaptistStatus(BaptistStatus baptistStatus)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            int id = 0;
+            LocalValidationHelper validationHelper = new LocalValidationHelper();
+            if (validationHelper.checkWriteAccess(User.Identity.Name, baptistStatus.MemberId))
+            {
+                Member memberInfo = new MemberUtility().getMemberInfo(baptistStatus.MemberId);
+                if (memberInfo == null)
+                {
+                    return NotFound();
+                }
+                id = memberInfo.BaptismStatusId;
             }
 
             if (id != baptistStatus.BaptismId)
@@ -72,21 +95,34 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // POST: api/BaptistStatus
+        [Authorize(Roles = "PresElder")]
+        [Route("addBaptismStatus")]
         [ResponseType(typeof(BaptistStatus))]
         public IHttpActionResult PostBaptistStatus(BaptistStatus baptistStatus)
         {
-            if (!ModelState.IsValid)
+            LocalValidationHelper validationHelper = new LocalValidationHelper();
+            if (validationHelper.checkWriteAccess(User.Identity.Name, baptistStatus.MemberId))
             {
-                return BadRequest(ModelState);
+                StatusUtility statusUtil = new StatusUtility();
+                db.BaptistStatus.Add(baptistStatus);
+                db.SaveChanges();
+                string query = "SELECT * FROM BaptistStatus where MemberId=@p0";
+                BaptistStatus baptismStatus = db.BaptistStatus.SqlQuery(query, baptistStatus.MemberId).Single();
+                statusUtil.updateMemberInfo(baptismStatus.BaptismId, baptistStatus.MemberId, "BapStatus");
+            }
+            else
+            {
+                return Unauthorized();
             }
 
-            db.BaptistStatus.Add(baptistStatus);
-            db.SaveChanges();
+            
 
             return CreatedAtRoute("DefaultApi", new { id = baptistStatus.BaptismId }, baptistStatus);
         }
 
         // DELETE: api/BaptistStatus/5
+        [Authorize(Roles = "PresElder")]
+        [Route("deleteBaptismStatus")]
         [ResponseType(typeof(BaptistStatus))]
         public IHttpActionResult DeleteBaptistStatus(int id)
         {

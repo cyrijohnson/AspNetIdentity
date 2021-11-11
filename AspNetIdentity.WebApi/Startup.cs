@@ -33,6 +33,7 @@ namespace AspNetIdentity.WebApi
 
             app.UseWebApi(httpConfig);
 
+
         }
 
         private void ConfigureOAuthTokenGeneration(IAppBuilder app)

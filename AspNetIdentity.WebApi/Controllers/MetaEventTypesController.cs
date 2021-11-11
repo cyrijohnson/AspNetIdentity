@@ -19,7 +19,7 @@ namespace AspNetIdentity.WebApi.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/MetaEventTypes
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
         [Route("getAllEventTypes")]
         public IQueryable<MetaEventType> GetMetaEventTypes()
         {
@@ -27,7 +27,7 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // GET: api/MetaEventTypes/5
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
         [Route("getEventTypeById")]
         [ResponseType(typeof(MetaEventType))]
         public IHttpActionResult GetMetaEventType(int id)
@@ -42,7 +42,7 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // PUT: api/MetaEventTypes/5
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
         [Route("updateEventType")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutMetaEventType(int id, MetaEventType metaEventType)
@@ -78,7 +78,7 @@ namespace AspNetIdentity.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
         [Route("createEventType")]
         // POST: api/MetaEventTypes
         [ResponseType(typeof(MetaEventType))]
@@ -96,7 +96,7 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // DELETE: api/MetaEventTypes/5
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
         [Route("deleteEventType")]
         [ResponseType(typeof(MetaEventType))]
         public IHttpActionResult DeleteMetaEventType(int id)

@@ -10,33 +10,51 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using AspNetIdentity.WebApi.Infrastructure;
 using AspNetIdentity.WebApi.Models;
+using AspNetIdentity.WebApi.Services;
 
 namespace AspNetIdentity.WebApi.Controllers
 {
+    [RoutePrefix("api/MemberStatus")]
     public class SocialMediaHandlersController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/SocialMediaHandlers
-        public IQueryable<SocialMediaHandler> GetSocialMediaHandlers()
-        {
-            return db.SocialMediaHandlers;
-        }
+        //public IQueryable<SocialMediaHandler> GetSocialMediaHandlers()
+        //{
+           // return db.SocialMediaHandlers;
+        //}
 
-        // GET: api/SocialMediaHandlers/5
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
+        [Route("getSmhByMemberId")]
         [ResponseType(typeof(SocialMediaHandler))]
-        public IHttpActionResult GetSocialMediaHandler(int id)
+        public IHttpActionResult GetSocialMediaHandler(int memberId)
         {
-            SocialMediaHandler socialMediaHandler = db.SocialMediaHandlers.Find(id);
-            if (socialMediaHandler == null)
+            List<SocialMediaHandler> response = new List<SocialMediaHandler>();
+            LocalValidationHelper validationHelper = new LocalValidationHelper();
+            if (validationHelper.checkUserValidity(User.Identity.Name, memberId))
+            {
+                var socialMediaHandler = db.SocialMediaHandlers.SqlQuery("SELECT * FROM SocialMediaHandlers where MemberId=@p0", memberId);
+                foreach (SocialMediaHandler data in socialMediaHandler)
+                {
+                    response.Add(new SocialMediaHandler
+                    {
+                        SocialMediaId = data.SocialMediaId,
+                        SocialMediaText = data.SocialMediaText,
+                        MemberId = data.MemberId,
+                        Link = data.Link
+                    });
+                }
+            }
+            else
             {
                 return NotFound();
             }
 
-            return Ok(socialMediaHandler);
+            return Ok(response);
         }
 
-        // PUT: api/SocialMediaHandlers/5
+        [Authorize(Roles = "PresElder")]
+        [Route("updateSmhById")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutSocialMediaHandler(int id, SocialMediaHandler socialMediaHandler)
         {
@@ -49,7 +67,11 @@ namespace AspNetIdentity.WebApi.Controllers
             {
                 return BadRequest();
             }
-
+            LocalValidationHelper validationHelper = new LocalValidationHelper();
+            if (validationHelper.checkWriteAccess(User.Identity.Name, socialMediaHandler.MemberId))
+            {
+                return NotFound();
+            }
             db.Entry(socialMediaHandler).State = EntityState.Modified;
 
             try
@@ -72,12 +94,19 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // POST: api/SocialMediaHandlers
+        [Authorize(Roles = "PresElder")]
+        [Route("AddSmh")]
         [ResponseType(typeof(SocialMediaHandler))]
         public IHttpActionResult PostSocialMediaHandler(SocialMediaHandler socialMediaHandler)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            LocalValidationHelper validationHelper = new LocalValidationHelper();
+            if (validationHelper.checkWriteAccess(User.Identity.Name, socialMediaHandler.MemberId))
+            {
+                return NotFound();
             }
 
             db.SocialMediaHandlers.Add(socialMediaHandler);
@@ -87,6 +116,8 @@ namespace AspNetIdentity.WebApi.Controllers
         }
 
         // DELETE: api/SocialMediaHandlers/5
+        [Authorize(Roles = "PresElder")]
+        [Route("deleteSmhById")]
         [ResponseType(typeof(SocialMediaHandler))]
         public IHttpActionResult DeleteSocialMediaHandler(int id)
         {
@@ -95,7 +126,11 @@ namespace AspNetIdentity.WebApi.Controllers
             {
                 return NotFound();
             }
-
+            LocalValidationHelper validationHelper = new LocalValidationHelper();
+            if (validationHelper.checkWriteAccess(User.Identity.Name, socialMediaHandler.MemberId))
+            {
+                return NotFound();
+            }
             db.SocialMediaHandlers.Remove(socialMediaHandler);
             db.SaveChanges();
 

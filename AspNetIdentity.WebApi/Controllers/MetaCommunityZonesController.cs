@@ -19,7 +19,7 @@ namespace AspNetIdentity.WebApi.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         
-        [Authorize(Roles = "User,Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, TopMgmt, BlkCoor, NatHead, RccHead,  AreaHead, DistPastor, PresElder")]
         [Route("getAllCommunityZones")]
         // GET: api/MetaCommunityZones
         public async System.Threading.Tasks.Task<IHttpActionResult> GetMetaCommunityZones()
