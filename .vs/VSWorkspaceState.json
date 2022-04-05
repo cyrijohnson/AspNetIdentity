@@ -3,10 +3,9 @@
     "",
     "\\AspNetIdentity.WebApi",
     "\\AspNetIdentity.WebApi\\Controllers",
-    "\\AspNetIdentity.WebApi\\Models",
-    "\\AspNetIdentity.WebApi\\Services",
-    "\\AspNetIdentity.WebApi\\Validators"
+    "\\AspNetIdentity.WebApi\\Infrastructure",
+    "\\AspNetIdentity.WebApi\\Models"
   ],
-  "SelectedNode": "\\AspNetIdentity.sln",
+  "SelectedNode": "\\AspNetIdentity.WebApi\\Models\\MetadataBindingModels.cs",
   "PreviewInSolutionExplorer": false
 }

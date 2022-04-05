@@ -1,4 +1,4 @@
-namespace AspNetIdentity.WebApi.Migrations
+﻿namespace AspNetIdentity.WebApi.Migrations
 {
     using AspNetIdentity.WebApi.Infrastructure;
     using Microsoft.AspNet.Identity;
@@ -12,12 +12,11 @@ namespace AspNetIdentity.WebApi.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(AspNetIdentity.WebApi.Infrastructure.ApplicationDbContext context)
         {
-            
             var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));

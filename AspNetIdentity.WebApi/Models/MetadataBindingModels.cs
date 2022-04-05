@@ -134,8 +134,6 @@ namespace AspNetIdentity.WebApi.Models
         [Display(Name = "Area Address")]
         public int AreaAddress { get; set; }
 
-        [ForeignKey("AreaAddress")]
-        public Address AddrFId { get; set; }
 
 
         [Required]

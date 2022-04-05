@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\obj"
+    "\\Controllers",
+    "\\Infrastructure",
+    "\\Models",
+    "\\obj",
+    "\\Services"
   ],
-  "SelectedNode": "\\AspNetIdentity.WebApi.csproj",
+  "SelectedNode": "\\Controllers\\MembersController.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -59,7 +59,7 @@ namespace AspNetIdentity.WebApi
 
         private void ConfigureOAuthTokenConsumption(IAppBuilder app) {
 
-            var issuer = "http://localhost:59822";
+            var issuer = "https://copcmsservice.azurewebsites.net";
             string audienceId = ConfigurationManager.AppSettings["as:AudienceId"];
             byte[] audienceSecret = TextEncodings.Base64Url.Decode(ConfigurationManager.AppSettings["as:AudienceSecret"]);
 
